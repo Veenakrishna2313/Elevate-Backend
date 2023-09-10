@@ -8,7 +8,8 @@ const movies=require("./routes/movies");
 const rentals = require("./routes/rentals");
 const mongoose = require("mongoose");
 const env = require('dotenv');
-const Fawn = require("fawn");
+const Joi = require("joi");
+Joi.objectId = require("joi-objectid")(Joi);
 
 const PORT = process.env.PORT || 3000;
 
