@@ -6,10 +6,11 @@ const _ = require("lodash");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const env = require("dotenv");
+const auth = require("./../middleware/auth");
 
 env.config();
 
-router.post("/", async (req, res) => {
+router.post("/",async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error);
 
@@ -32,5 +33,10 @@ router.post("/", async (req, res) => {
     res.status(500).send("failed to create a new User", err);
   }
 });
+
+router.get("/me",auth,async(req,res)=>{
+  const user=await User.findById(req.user._id).select("-password");
+  res.send(user);
+})
 
 module.exports = router;
