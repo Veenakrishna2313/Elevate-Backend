@@ -1,5 +1,7 @@
 const express = require("express");
 const app = express();
+require("express-async-errors");
+const winston=require("winston");
 const logger=require('./logger');
 const authenticator =require('./authenticator');
 const genres=require('./routes/genres');
@@ -12,8 +14,11 @@ const mongoose = require("mongoose");
 const env = require('dotenv');
 const Joi = require("joi");
 Joi.objectId = require("joi-objectid")(Joi);
+const error=require("./middleware/error");
+require("express-async-errors")
 
 const PORT = process.env.PORT || 3000;
+
 
 env.config();
 const atlasConnectionURL = process.env.MONGODB_URI;
@@ -35,6 +40,8 @@ app.use("/api/movies", movies);
 app.use("/api/rentals", rentals);
 app.use("/api/users", users);
 app.use("/api/login", login);
+
+app.use(error)
 
 
 app.get("/", (req, res) => {
